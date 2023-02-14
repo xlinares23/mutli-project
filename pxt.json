@@ -2,13 +2,15 @@
     "name": "mutli-project",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "Start of the Game.": "pkg:Start of the Game..json"
     },
     "files": [
         "main.blocks",
         "main.ts",
         "README.md",
-        "assets.json"
+        "assets.json",
+        "Start of the Game..json"
     ],
     "testFiles": [
         "test.ts"
