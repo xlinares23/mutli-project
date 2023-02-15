@@ -1,88 +1,20 @@
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (difficulty == "easy") {
-        projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . b 5 b . . . 
-            . . . . . . . . . b 5 b . . . . 
-            . . . . . . b b b b b b . . . . 
-            . . . . . b b 5 5 5 5 5 b . . . 
-            . . . . b b . d 1 . 5 d 4 c . . 
-            . . . . b . . 1 . . d d 4 4 4 b 
-            . . . . b . . d . b 4 4 4 4 b . 
-            . . . b d . . . . 4 4 4 4 b . . 
-            . . b d d . . . . . . . . b . . 
-            . b d d d d . . . . . . . . b . 
-            b d d d b b b . . . . . . . b . 
-            c d d b 5 5 d c . . . . . . b . 
-            c b b d 5 d c d . . . . . . b . 
-            . b 5 5 b c d d . . . . . d b . 
-            b b c c c d d d d . . . b b . . 
-            . . . c c c c c c c c b b . . . 
-            `, theShip, 0, -85)
-    } else if (difficulty == "hard") {
-        projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, theShip, 0, -85)
+    if (difficulty == "a") {
+        projectile = sprites.createProjectileFromSprite(laserArray._pickRandom(), theShip, 0, -85)
+    } else if (difficulty == "b") {
+        projectile = sprites.createProjectileFromSprite(laserArray._pickRandom(), theShip, 0, -85)
         pause(500)
     }
 })
 function difficultyChecker (difficulty: string) {
-    while (difficulty == "easy") {
-        stranger = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.Enemy)
+    while (difficulty == "a") {
+        stranger = sprites.create(spriteArray._pickRandom(), SpriteKind.Enemy)
         stranger.setPosition(randint(0, 155), 0)
         stranger.setVelocity(75, 75)
         pause(1000)
     }
-    while (difficulty == "hard") {
-        stranger = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.Enemy)
+    while (difficulty == "b") {
+        stranger = sprites.create(spriteArray._pickRandom(), SpriteKind.Enemy)
         stranger.setPosition(randint(0, 155), 0)
         stranger.setVelocity(randint(-20, 20), 140)
         pause(800)
@@ -98,9 +30,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let stranger: Sprite = null
 let projectile: Sprite = null
+let laserArray: Image[] = []
+let spriteArray: Image[] = []
 let theShip: Sprite = null
 let difficulty = ""
-difficulty = game.askForString("Pick easy or hard", 4)
+difficulty = game.askForString("pick \"a\" for easy; pick \"b\" for hard", 1)
 scene.setBackgroundImage(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -245,4 +179,132 @@ theShip = sprites.create(img`
 controller.moveSprite(theShip, 125, 125)
 theShip.setStayInScreen(true)
 theShip.setKind(SpriteKind.Player)
+spriteArray = [
+img`
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . 8 8 8 8 8 8 8 . . . . . 
+    . . . . 8 8 8 8 8 8 8 8 8 . . . . 
+    . . . 8 8 8 8 8 8 8 8 8 8 8 . . . 
+    . . 8 8 8 5 5 8 8 8 5 5 8 8 8 . . 
+    . . 8 8 8 5 5 8 8 8 5 5 8 8 8 . . 
+    . . 8 8 8 5 5 8 8 8 5 5 8 8 8 . . 
+    . . 8 8 8 5 8 8 8 8 5 8 8 8 8 . . 
+    . . 8 8 8 8 8 8 8 8 8 8 8 8 8 . . 
+    . . 8 8 8 8 8 8 8 8 8 8 8 8 8 . . 
+    . . 8 8 8 8 8 8 8 8 8 8 8 8 8 . . 
+    . . . 8 8 8 8 8 8 8 8 8 8 8 . . . 
+    . . . . 8 8 8 8 8 8 8 8 8 . . . . 
+    . . . . . 8 8 8 8 8 8 8 . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    `,
+img`
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . 2 2 2 2 2 2 2 . . . . . 
+    . . . . 2 2 2 2 2 2 2 2 2 . . . . 
+    . . . 2 2 2 2 2 2 2 2 2 2 2 . . . 
+    . . 2 2 2 5 5 2 2 2 5 5 2 2 2 . . 
+    . . 2 2 2 5 5 2 2 2 5 5 2 2 2 . . 
+    . . 2 2 2 5 5 2 2 2 5 5 2 2 2 . . 
+    . . 2 2 2 5 2 2 2 2 5 2 2 2 2 . . 
+    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . . 
+    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . . 
+    . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . . 
+    . . . 2 2 2 2 2 2 2 2 2 2 2 . . . 
+    . . . . 2 2 2 2 2 2 2 2 2 . . . . 
+    . . . . . 2 2 2 2 2 2 2 . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    `,
+img`
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . 4 4 4 4 4 4 4 . . . . . 
+    . . . . 4 4 4 4 4 4 4 4 4 . . . . 
+    . . . 4 4 4 4 4 4 4 4 4 4 4 . . . 
+    . . 4 4 4 5 5 4 4 4 5 5 4 4 4 . . 
+    . . 4 4 4 5 5 4 4 4 5 5 4 4 4 . . 
+    . . 4 4 4 5 5 4 4 4 5 5 4 4 4 . . 
+    . . 4 4 4 5 4 4 4 4 5 4 4 4 4 . . 
+    . . 4 4 4 4 4 4 4 4 4 4 4 4 4 . . 
+    . . 4 4 4 4 4 4 4 4 4 4 4 4 4 . . 
+    . . 4 4 4 4 4 4 4 4 4 4 4 4 4 . . 
+    . . . 4 4 4 4 4 4 4 4 4 4 4 . . . 
+    . . . . 4 4 4 4 4 4 4 4 4 . . . . 
+    . . . . . 4 4 4 4 4 4 4 . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    `,
+img`
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . 9 9 9 9 9 9 9 . . . . . 
+    . . . . 9 9 9 9 9 9 9 9 9 . . . . 
+    . . . 9 9 9 9 9 9 9 9 9 9 9 . . . 
+    . . 9 9 9 5 5 9 9 9 5 5 9 9 9 . . 
+    . . 9 9 9 5 5 9 9 9 5 5 9 9 9 . . 
+    . . 9 9 9 5 5 9 9 9 5 5 9 9 9 . . 
+    . . 9 9 9 5 9 9 9 9 5 9 9 9 9 . . 
+    . . 9 9 9 9 9 9 9 9 9 9 9 9 9 . . 
+    . . 9 9 9 9 9 9 9 9 9 9 9 9 9 . . 
+    . . 9 9 9 9 9 9 9 9 9 9 9 9 9 . . 
+    . . . 9 9 9 9 9 9 9 9 9 9 9 . . . 
+    . . . . 9 9 9 9 9 9 9 9 9 . . . . 
+    . . . . . 9 9 9 9 9 9 9 . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . . 
+    `
+]
+laserArray = [
+img`
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    4 5 5 4 
+    `,
+img`
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    8 9 9 8 
+    `,
+img`
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    2 3 3 2 
+    `,
+img`
+    a d d a 
+    a d d a 
+    a d d a 
+    a d d a 
+    a d d a 
+    a d d a 
+    a d d a 
+    a d d a 
+    a d d a 
+    a d d a 
+    `
+]
 difficultyChecker(difficulty)

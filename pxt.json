@@ -1,5 +1,5 @@
 {
-    "name": "mutli-project",
+    "name": "mutli-project - Copy",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -10,7 +10,9 @@
         "main.ts",
         "README.md",
         "assets.json",
-        "Start of the Game..json"
+        "Start of the Game..json",
+        "images.g.jres",
+        "images.g.ts"
     ],
     "testFiles": [
         "test.ts"
