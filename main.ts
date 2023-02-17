@@ -1,3 +1,7 @@
+namespace SpriteKind {
+    export const PlayerTwo = SpriteKind.create()
+    export const projectile2 = SpriteKind.create()
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (difficulty == "a") {
         projectile = sprites.createProjectileFromSprite(laserArray._pickRandom(), theShip, 0, -85)
@@ -5,6 +9,31 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         projectile = sprites.createProjectileFromSprite(laserArray._pickRandom(), theShip, 0, -85)
         pause(500)
     }
+})
+controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    if (difficulty == "a") {
+        projectileTwo = sprites.createProjectileFromSprite(laserArray._pickRandom(), shipPLayerTwo, 0, -85)
+        projectileTwo.setKind(SpriteKind.projectile2)
+    } else if (difficulty == "b") {
+        projectileTwo = sprites.createProjectileFromSprite(laserArray._pickRandom(), shipPLayerTwo, 0, -85)
+        projectileTwo.setKind(SpriteKind.projectile2)
+        pause(500)
+    }
+})
+sprites.onOverlap(SpriteKind.PlayerTwo, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(stranger, effects.spray, 500)
+    info.player2.changeLifeBy(-1)
+    if (info.life() == 0 && info.player2.life() == 0) {
+        game.gameOver(false)
+    }
+})
+sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(stranger, effects.fire, 200)
+    info.player2.changeScoreBy(1)
+})
+info.onLifeZero(function () {
+    sprites.destroy(theShip, effects.spray, 500)
+    theShip.setFlag(SpriteFlag.Ghost, true)
 })
 function difficultyChecker (difficulty: string) {
     while (difficulty == "a") {
@@ -20,6 +49,10 @@ function difficultyChecker (difficulty: string) {
         pause(800)
     }
 }
+info.player2.onLifeZero(function () {
+    sprites.destroy(shipPLayerTwo, effects.spray, 500)
+    shipPLayerTwo.setFlag(SpriteFlag.Ghost, true)
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(stranger, effects.fire, 200)
     info.changeScoreBy(1)
@@ -27,14 +60,20 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(stranger, effects.spray, 500)
     info.changeLifeBy(-1)
+    if (info.life() == 0 && info.player2.life() == 0) {
+        game.gameOver(false)
+    }
 })
 let stranger: Sprite = null
+let projectileTwo: Sprite = null
 let projectile: Sprite = null
 let laserArray: Image[] = []
 let spriteArray: Image[] = []
 let theShip: Sprite = null
+let shipPLayerTwo: Sprite = null
 let difficulty = ""
 difficulty = game.askForString("pick \"a\" for easy; pick \"b\" for hard", 1)
+let multiplayer2 = game.askForString("a = 1Player | b = 2Player", 1)
 scene.setBackgroundImage(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -157,22 +196,46 @@ scene.setBackgroundImage(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     `)
+if (multiplayer2 == "b") {
+    info.player2.setLife(3)
+    shipPLayerTwo = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . 9 9 . . . . . . . 
+        . . . . . . 9 1 1 9 . . . . . . 
+        . . . . . . 9 1 1 9 . . . . . . 
+        . . 9 8 8 9 1 1 1 1 9 8 8 . . . 
+        . . 9 9 1 1 1 1 1 1 1 1 9 9 . . 
+        . . 9 9 1 1 1 1 1 1 1 1 9 9 . . 
+        . . . 9 1 1 1 1 1 1 1 1 9 . . . 
+        . . . . 9 1 1 1 1 1 1 9 . . . . 
+        . . . . 8 1 1 1 1 1 1 8 . . . . 
+        . . . . 8 1 1 9 9 1 1 8 . . . . 
+        . . . . 9 9 9 8 8 9 9 9 . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Player)
+    controller.player2.moveSprite(shipPLayerTwo, 125, 125)
+    shipPLayerTwo.setStayInScreen(true)
+    shipPLayerTwo.setKind(SpriteKind.PlayerTwo)
+}
 info.setLife(3)
 theShip = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
+    . . . . . . . 3 3 . . . . . . . 
+    . . . . . . 3 1 1 3 . . . . . . 
+    . . . . . . 3 1 1 3 . . . . . . 
+    . . 3 2 2 3 1 1 1 1 3 2 2 . . . 
+    . . 3 3 1 1 1 1 1 1 1 1 3 3 . . 
+    . . 3 3 1 1 1 1 1 1 1 1 3 3 . . 
+    . . . 3 1 1 1 1 1 1 1 1 3 . . . 
+    . . . . 3 1 1 1 1 1 1 3 . . . . 
+    . . . . 2 1 1 1 1 1 1 2 . . . . 
+    . . . . 2 1 1 3 3 1 1 2 . . . . 
+    . . . . 3 3 3 2 2 2 3 3 . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
