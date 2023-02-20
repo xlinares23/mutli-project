@@ -367,9 +367,15 @@ info.player2.onLifeZero(function () {
     sprites.destroy(shipPLayerTwo, effects.spray, 500)
     shipPLayerTwo.setFlag(SpriteFlag.Ghost, true)
 })
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleRedCrystal, function (sprite, location) {
+    tiles.setTileAt(location, sprites.castle.tilePath5)
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(stranger, effects.fire, 200)
     info.changeScoreBy(1)
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.collectibleInsignia, function (sprite, location) {
+    mainGame()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(stranger, effects.spray, 500)
@@ -385,9 +391,30 @@ let multiplayer2 = ""
 let stranger: Sprite = null
 let shipPLayerTwo: Sprite = null
 let projectileTwo: Sprite = null
-let theShip: Sprite = null
 let laserArray: Image[] = []
 let projectile: Sprite = null
 let difficulty = ""
 let addition = 0
-mainGame()
+let theShip: Sprite = null
+theShip = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . 7 7 . . . . . . . 
+    . . . . . . 7 1 1 7 . . . . . . 
+    . . . . . . 7 1 1 7 . . . . . . 
+    . . 7 6 6 7 1 1 1 1 7 6 6 . . . 
+    . . 7 7 1 1 1 1 1 1 1 1 7 7 . . 
+    . . 7 7 1 1 1 1 1 1 1 1 7 7 . . 
+    . . . 7 1 1 1 1 1 1 1 1 7 . . . 
+    . . . . 7 1 1 1 1 1 1 7 . . . . 
+    . . . . 6 1 1 1 1 1 1 6 . . . . 
+    . . . . 6 1 1 7 7 1 1 6 . . . . 
+    . . . . 7 7 7 6 6 6 7 7 . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Player)
+tiles.setCurrentTilemap(tilemap`level1`)
+scene.cameraFollowSprite(theShip)
+tiles.placeOnTile(theShip, tiles.getTileLocation(14, 15))
+controller.moveSprite(theShip, 100, 100)
