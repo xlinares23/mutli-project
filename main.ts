@@ -88,6 +88,7 @@ let multiplayer2 = ""
 let difficulty = ""
 difficulty = game.askForString("a = easy | b = hard", 1)
 multiplayer2 = game.askForString("a = 1Player | b = 2Player", 1)
+tiles.setCurrentTilemap(tilemap`level2`)
 scene.setBackgroundImage(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
