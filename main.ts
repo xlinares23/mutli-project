@@ -2,6 +2,10 @@ namespace SpriteKind {
     export const PlayerTwo = SpriteKind.create()
     export const projectile2 = SpriteKind.create()
 }
+function multiplayerScores () {
+    addition = info.score() + info.player2.score()
+    return addition
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (difficulty == "a") {
         projectile = sprites.createProjectileFromSprite(laserArray._pickRandom(), theShip, 0, -85)
@@ -24,6 +28,8 @@ sprites.onOverlap(SpriteKind.PlayerTwo, SpriteKind.Enemy, function (sprite, othe
     sprites.destroy(stranger, effects.spray, 500)
     info.player2.changeLifeBy(-1)
     if (info.life() == 0 && info.player2.life() == 0) {
+        multiplayerScores()
+        game.showLongText("Total Score: " + addition, DialogLayout.Full)
         game.gameOver(false)
     }
 })
@@ -32,8 +38,12 @@ sprites.onOverlap(SpriteKind.projectile2, SpriteKind.Enemy, function (sprite, ot
     info.player2.changeScoreBy(1)
 })
 info.onLifeZero(function () {
-    sprites.destroy(theShip, effects.spray, 500)
-    theShip.setFlag(SpriteFlag.Ghost, true)
+    if (multiplayer2 == "a") {
+        game.gameOver(false)
+    } else if (multiplayer2 == "b") {
+        sprites.destroy(theShip, effects.spray, 500)
+        theShip.setFlag(SpriteFlag.Ghost, true)
+    }
 })
 function difficultyChecker (difficulty: string) {
     while (difficulty == "a") {
@@ -61,19 +71,23 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     sprites.destroy(stranger, effects.spray, 500)
     info.changeLifeBy(-1)
     if (info.life() == 0 && info.player2.life() == 0) {
+        multiplayerScores()
+        game.showLongText("Total Score: " + addition, DialogLayout.Full)
         game.gameOver(false)
     }
 })
 let stranger: Sprite = null
 let projectileTwo: Sprite = null
 let projectile: Sprite = null
+let addition = 0
 let laserArray: Image[] = []
 let spriteArray: Image[] = []
 let theShip: Sprite = null
 let shipPLayerTwo: Sprite = null
+let multiplayer2 = ""
 let difficulty = ""
-difficulty = game.askForString("pick \"a\" for easy; pick \"b\" for hard", 1)
-let multiplayer2 = game.askForString("a = 1Player | b = 2Player", 1)
+difficulty = game.askForString("a = easy | b = hard", 1)
+multiplayer2 = game.askForString("a = 1Player | b = 2Player", 1)
 scene.setBackgroundImage(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
